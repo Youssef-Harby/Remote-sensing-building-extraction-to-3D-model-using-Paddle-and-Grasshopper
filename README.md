@@ -13,7 +13,6 @@ a detailed sorting , using a new data set and post-processing method
 (inaccurate) and changing it to random Height (big guy can also be
 changed to calculate the height according to the shadow of the
 building)\] 】*
-:::
 
 # One, model training
 
@@ -28,7 +27,6 @@ training to deployment
 
 -   model：Unet++
 -   dataset：Aerial imagery dataset
-:::
 
 ## 1. Install dependencies/decompress data sets {#1-install-dependenciesdecompress-data-sets}
 
@@ -42,22 +40,18 @@ training to deployment
     here (the original data comes from the Photogrammetry and Computer
     Vision Group (GPCV) of Wuhan University-Ji Shunping. Introduction to
     Intelligent Photogrammetry \[M\], Science Press, 2018. 4 moon.
-:::
 
-::: {.cell .code}
 ``` {.python}
 ! pip install paddleseg # Already installed in docker (requirements.txt)
 ! unzip -q /home/aistudio/data/data69911/BuildData.zip -d DataSet
 ```
-:::
+
 
 ## 2. Generate data list {#2-generate-data-list}
 
 Generate training set and test set according to 9:1, after the data list
 is generated, there is no need to run this module repeatedly
-:::
 
-::: {.cell .code execution_count="11"}
 ``` {.python}
 import os
 import random
@@ -92,10 +86,8 @@ plt.subplot(122);plt.imshow(vis_lab);plt.xticks([]);plt.yticks([]);plt.title('La
 plt.show()
 ```
 
-::: {.output .display_data}
 ![](md_images/2bf4b5233c2b19a200188f942e26245e29e8e97d.png)
-:::
-:::
+
 
 ## 3. Train the network {#3-train-the-network}
 
@@ -109,7 +101,6 @@ purpose of reducing encoders and decoding Semantic gap
 ![](md_images/9fe87e021a0040e1593b37b1996ee803b856871a.jpg)
 :::
 
-::: {.cell .code execution_count="12"}
 ``` {.python}
 import paddle
 from paddleseg.models import UNetPlusPlus
@@ -178,7 +169,6 @@ def train_model(base_lr=0.00001, iters=10000, batch_size=8, model_path=None):
 
 # train_model(iters=1000, model_path='output/model_kp0.9085/model.pdparams')
 ```
-:::
 
 ## 4. Evaluation {#4-evaluation}
 
@@ -187,9 +177,7 @@ You can see that the evaluation result of the best model is not bad
     [EVAL] #Images=910 mIoU=0.9143 Acc=0.9773 Kappa=0.9085 
     [EVAL] Class IoU: [0.8549 0.9738]
     [EVAL] Class Acc: [0.935  0.9843]
-:::
 
-::: {.cell .code}
 ``` {.python}
 import paddle
 from paddleseg.models import UNetPlusPlus
@@ -225,7 +213,6 @@ eval_model(model_path='output/model_kp0.9085/model.pdparams')
 ```
 :::
 
-::: {.cell .code execution_count="16"}
 ``` {.python}
 import numpy as np
 import paddle
@@ -264,16 +251,13 @@ lab_path = 'DataSet/label//' + name + '.png'
 _ = nn_infer(img_path, lab_path)
 ```
 
-::: {.output .display_data}
 ![](md_images/6e645c06624f353b8a65a0a585ba2567c3fa3848.png)
-:::
-:::
 
 ## 5. The network\'s outcome prediction {#5-the-networks-outcome-prediction}
 
 Take the 5255 group of images as an example to view the predicted
 results
-:::
+
 
 ## 6. Opencv post-processing (\*adaptive modeling) {#6-opencv-post-processing-adaptive-modeling}
 
@@ -285,9 +269,7 @@ need to be performed:
 -   Calculate the connected area, delete the connected area less than a
     certain threshold
 -   Fit the boundary to simplify the shape
-:::
 
-::: {.cell .code execution_count="6"}
 ``` {.python}
 import cv2
 
@@ -325,17 +307,12 @@ def build_extracter(
 conts = build_extracter(img_path)
 ```
 
-::: {.output .display_data}
 ![](md_images/13f540fbe0712425bec3f214ae33a3acf32018cf.png)
-:::
-:::
 
 ## 7. Export prediction model {#7-export-prediction-model}
 
 Use paddle.jit.save to save the model as a predictive model
-:::
 
-::: {.cell .code execution_count="7"}
 ``` {.python}
 import paddle
 from paddle.static import InputSpec
@@ -351,15 +328,12 @@ params_path = 'output/model_kp0.9085/model.pdparams'
 save_path = "output_inf/UnetPP"
 # output_inf_model(params_path, save_path)
 ```
-:::
 
 ## 8. Test load prediction model {#8-test-load-prediction-model}
 
 Use paddle.jit.load to load the model in to ensure that the exported
 prediction model can be used normally
-:::
 
-::: {.cell .code execution_count="8"}
 ``` {.python}
 import paddle
 import paddleseg.transforms as T
@@ -383,22 +357,16 @@ plt.imshow(pred.astype('uint8'));plt.title('Inf Result');plt.xticks([]);plt.ytic
 plt.show()
 ```
 
-::: {.output .stream .stderr}
     /usr/local/lib/python3.8/site-packages/paddle/fluid/backward.py:1697: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3, and in 3.10 it will stop working
       return list(x) if isinstance(x, collections.Sequence) else [x]
-:::
 
-::: {.output .display_data}
 ![](md_images/ca380f3637fd530d5f1a866dcfc868b626c38a0d.png)
-:::
-:::
 
 # Two, Grasshopper model deployment
 
 The above operations in AI Studio have been completed, and the following
 operations cannot be run, and will be described using Markdown. Need to
 operate locally on the computer with Rhino (with Grasshopper)
-:::
 
 ## 1. Export the model to local {#1-export-the-model-to-local}
 
@@ -406,7 +374,6 @@ Select in the left folder`output_inf`，Click the download icon on the
 right to download the prediction model to a local task folder. Unzip and
 copy the files inside to the outer layer (AI Studio downloads will have
 the path home\\aistudio by default)
-:::
 
 ## 2. Create a python environment {#2-create-a-python-environment}
 
@@ -415,7 +382,6 @@ paddlepaddle, paddleseg, opencv, (whatever) named pdseg
 
     conda create -n pdseg python=3.7
     pip install paddlepaddle/paddleseg/opencv-python……
-:::
 
 # 3. Configure the grasshopper environment {#3-configure-the-grasshopper-environment}
 
@@ -440,7 +406,6 @@ of designers. efficient
     the menu bar, and set the python to be used in the pdseg environment
     in the virtual environment (the environment configured in the second
     step).
-:::
 
 ## 4. Write the code and connect the battery {#4-write-the-code-and-connect-the-battery}
 
@@ -461,7 +426,6 @@ As shown in the figure, the logic is relatively clear, namely
 -   `.gh`The file has been placed in the folder
 
 ![](md_images/3222c8d88c545ca354831ce44e1f28e247776c11.jpg)
-:::
 
 ## 5. Animation effect {#5-animation-effect}
 
@@ -470,7 +434,6 @@ minimum/maximum storeys, storey heights and boundary simplification
 parameters of the building\~
 
 ![](md_images/71b08d6a9512837396e9b79bb0a057ce4c5c5cce.gif)
-:::
 
 # about 
 
