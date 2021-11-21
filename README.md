@@ -1,3 +1,19 @@
+## How To Use
+- Install docker https://docs.docker.com/engine/install/ (macos, Windows or Linux)
+- Clone the Repository : ```git clone https://github.com/Youssef-Harby/Remote-sensing-building-extraction-to-3D-model-using-Paddle-and-Grasshopper.git```
+- Go to project directory " ```cd Remote-sensing-building-extraction-to-3D-model-using-Paddle-and-Grasshopper```
+- download or make your own dataset : https://aistudio.baidu.com/aistudio/datasetdetail/69911
+- Make sure you copied the dataset and the folders should be like that.
+  
+  ![](md_images\folders.png)
+
+- Build the docke image : ```docker compose up --build ```
+- go to http://127.0.0.1:8888/
+- you will find your token in the cli of the image.
+  
+  ![](md_images\jnb-token.png)
+
+## Code In Detail ⬇️
 
 # Remote sensing building extraction to 3D model using Paddle and Grasshopper
 
@@ -7,7 +23,7 @@ quickly generate building models from remote sensing images? Wait and
 see\~ \~
 
 *【It can be regarded of the previous
-project[Rhino(Grasshopper)+PaddleX快速建模](https://aistudio.baidu.com/aistudio/projectdetail/1311631)as
+project [Rhino(Grasshopper)+PaddleX快速建模](https://aistudio.baidu.com/aistudio/projectdetail/1311631) as
 a detailed sorting , using a new data set and post-processing method
 (simplified boundary), canceling the building height prediction
 (inaccurate) and changing it to random Height (big guy can also be
@@ -28,7 +44,7 @@ training to deployment
 -   model：Unet++
 -   dataset：Aerial imagery dataset
 
-## 1. Install dependencies/decompress data sets {#1-install-dependenciesdecompress-data-sets}
+## 1. #Install dependencies/decompress data sets
 
 -   You need to pip paddleseg before each run
 -   The data set does not need to be decompressed repeatedly. The
@@ -47,7 +63,7 @@ training to deployment
 ```
 
 
-## 2. Generate data list {#2-generate-data-list}
+## 2. #Generate data list
 
 Generate training set and test set according to 9:1, after the data list
 is generated, there is no need to run this module repeatedly
@@ -89,10 +105,9 @@ plt.show()
 ![](md_images/2bf4b5233c2b19a200188f942e26245e29e8e97d.png)
 
 
-## 3. Train the network {#3-train-the-network}
-
+## #3. Train the network
 Using the Unet++ network provided by PaddleSeg, the author of this
-network[知乎](https://zhuanlan.zhihu.com/p/44958351)the design concept
+network [知乎](https://zhuanlan.zhihu.com/p/44958351) the design concept
 of Unet++ very clearly. Compared with the original Unet network, in
 order to avoid the fusion of the semantically dissimilar features of
 pure jump connections in UNet, UNet++ further strengthens these
@@ -170,7 +185,7 @@ def train_model(base_lr=0.00001, iters=10000, batch_size=8, model_path=None):
 # train_model(iters=1000, model_path='output/model_kp0.9085/model.pdparams')
 ```
 
-## 4. Evaluation {#4-evaluation}
+## #4. Evaluation
 
 You can see that the evaluation result of the best model is not bad
 
@@ -253,13 +268,13 @@ _ = nn_infer(img_path, lab_path)
 
 ![](md_images/6e645c06624f353b8a65a0a585ba2567c3fa3848.png)
 
-## 5. The network\'s outcome prediction {#5-the-networks-outcome-prediction}
+## #5. The network\'s outcome prediction
 
 Take the 5255 group of images as an example to view the predicted
 results
 
 
-## 6. Opencv post-processing (\*adaptive modeling) {#6-opencv-post-processing-adaptive-modeling}
+## 6. #Opencv post-processing (\*adaptive modeling)
 
 It is not enough to just get the segmentation results here. In order to
 model fewer faces and simple shapes, the following operations can or
@@ -309,7 +324,7 @@ conts = build_extracter(img_path)
 
 ![](md_images/13f540fbe0712425bec3f214ae33a3acf32018cf.png)
 
-## 7. Export prediction model {#7-export-prediction-model}
+## 7. #Export prediction model
 
 Use paddle.jit.save to save the model as a predictive model
 
@@ -329,7 +344,7 @@ save_path = "output_inf/UnetPP"
 # output_inf_model(params_path, save_path)
 ```
 
-## 8. Test load prediction model {#8-test-load-prediction-model}
+## 8. #Test load prediction model
 
 Use paddle.jit.load to load the model in to ensure that the exported
 prediction model can be used normally
@@ -368,14 +383,14 @@ The above operations in AI Studio have been completed, and the following
 operations cannot be run, and will be described using Markdown. Need to
 operate locally on the computer with Rhino (with Grasshopper)
 
-## 1. Export the model to local {#1-export-the-model-to-local}
+## #1. Export the model to local
 
 Select in the left folder`output_inf`，Click the download icon on the
 right to download the prediction model to a local task folder. Unzip and
 copy the files inside to the outer layer (AI Studio downloads will have
 the path home\\aistudio by default)
 
-## 2. Create a python environment {#2-create-a-python-environment}
+## #2. Create a python environment
 
 Use conda to create a new virtual environment, you need pip on numpy,
 paddlepaddle, paddleseg, opencv, (whatever) named pdseg
@@ -383,7 +398,7 @@ paddlepaddle, paddleseg, opencv, (whatever) named pdseg
     conda create -n pdseg python=3.7
     pip install paddlepaddle/paddleseg/opencv-python……
 
-# 3. Configure the grasshopper environment {#3-configure-the-grasshopper-environment}
+# #3. Configure the grasshopper environment
 
 Grasshopper (GH for short) is a visual programming language that runs on
 the Rhino platform. It is one of the mainstream software in the
@@ -407,7 +422,7 @@ of designers. efficient
     in the virtual environment (the environment configured in the second
     step).
 
-## 4. Write the code and connect the battery {#4-write-the-code-and-connect-the-battery}
+## #4. Write the code and connect the battery
 
 As shown in the figure, the logic is relatively clear, namely
 
@@ -427,7 +442,7 @@ As shown in the figure, the logic is relatively clear, namely
 
 ![](md_images/3222c8d88c545ca354831ce44e1f28e247776c11.jpg)
 
-## 5. Animation effect {#5-animation-effect}
+## #5. Animation effect
 
 At most 1M is really tired, showing the effect of changing the
 minimum/maximum storeys, storey heights and boundary simplification
@@ -442,4 +457,4 @@ parameters of the building\~
 | School/Professional | Surveying and Mapping Science and Technology, Chongqing Jiaotong University |
 | Home page | https://aistudio.baidu.com/aistudio/personalcenter/thirdview/1945 |
 
-I hope to communicate more with everyone, especially the remote sensing students. 
+I hope to communicate more with everyone, especially the remote sensing students.
