@@ -1,0 +1,3 @@
+[submodule "split-rs-data"]
+	path = split-rs-data
+	url = https://github.com/geoyee/split-rs-data
