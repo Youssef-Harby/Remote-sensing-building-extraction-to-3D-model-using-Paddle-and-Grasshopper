@@ -5,13 +5,13 @@
 - download or make your own dataset : https://aistudio.baidu.com/aistudio/datasetdetail/69911
 - Make sure you copied the dataset and the folders should be like that.
   
-  ![](md_images\folders.png)
-
+  ![](md_images/folders.png)
+  
 - Build the docke image : ```docker compose up --build ```
 - go to http://127.0.0.1:8888/
 - you will find your token in the cli of the image.
   
-  ![](md_images\jnb-token.png)
+  ![](md_images/jnb-token.png)
 
 ## Code In Detail ⬇️
 
